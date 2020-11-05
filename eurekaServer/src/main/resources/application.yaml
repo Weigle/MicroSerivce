@@ -1,0 +1,9 @@
+server:
+  port: 8761
+  name: spring-eureka
+eureka:
+  instance:
+    hostname: 0.0.0.0
+  client:
+    registerWithEureka: true
+    fetchRegistry: false

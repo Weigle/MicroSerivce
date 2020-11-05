@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: spring-cloud-integration
+server:
+  port: 8764
+eureka:
+  client:
+    serviceUrl:
+     defaultZone: http://spring-eureka:8761/eureka
+    fetch-registry: true
+    preferIpAddress: true
+  instance:
+    lease-renewal-interval-in-seconds: 10

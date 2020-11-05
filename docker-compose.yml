@@ -1,0 +1,59 @@
+version: '3.4'
+
+services:
+  mysql8:
+    image: mysql:8
+    container_name: mysql8
+    command: --default-authentication-plugin=mysql_native_password 
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: microService
+
+  spring-eureka:
+    build:
+        context: .
+        dockerfile: "./eurekaServer/Dockerfile"
+    container_name: spring-eureka
+    volumes:
+      - "./eurekaServer/target/eurekaServer-0.0.1-SNAPSHOT.jar:/app.jar"
+    ports:
+      - 8761:8761
+  spring-client:
+    depends_on: 
+     - "spring-eureka"
+    build:
+        context: .
+        dockerfile: "./eurekaServer/Dockerfile"
+    container_name: spring-client
+    volumes:
+      - "./client/target/client-0.0.1-SNAPSHOT.jar:/app.jar"
+    ports:
+      - 8762:8762
+
+  spring-report:
+    depends_on: 
+     - "spring-eureka"
+     - "mysql8"
+    build:
+        context: .
+        dockerfile: "./reports/Dockerfile"
+    container_name: spring-report
+    volumes:
+      - "./reports/target/reports-0.0.1-SNAPSHOT.jar:/app.jar"
+    ports:
+      - 8763:8763
+
+  spring-integration:
+    depends_on: 
+     - "spring-eureka"
+     - "mysql8"
+    build:
+        context: .
+        dockerfile: "./integration/Dockerfile"
+    container_name: spring-integration
+    volumes:
+      - "./integration/target/Integration-0.0.1-SNAPSHOT.jar:/app.jar"
+    ports:
+      - 8764:8764
